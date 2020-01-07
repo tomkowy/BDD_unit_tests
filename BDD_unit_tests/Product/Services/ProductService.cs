@@ -13,10 +13,11 @@ namespace BDD_unit_tests.Product.Services
         private readonly IUserRepository _userRepository;
         private readonly BddDbContext _dbContext;
 
-        public ProductService()
+        public ProductService(BddDbContext dbContext)
         {
-            _productRepository = new ProductReposiotry();
-            _userRepository = new UserRepository();
+            _dbContext = dbContext;
+            _productRepository = new ProductReposiotry(dbContext);
+            _userRepository = new UserRepository(dbContext);
         }
 
         public void Add(int currentUserId, string name, int cost)

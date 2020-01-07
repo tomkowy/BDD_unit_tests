@@ -8,6 +8,11 @@ namespace BDD_unit_tests.Product.Repository
     {
         private readonly BddDbContext _dbContext;
 
+        public ProductReposiotry(BddDbContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
+
         public bool Exist(string name)
         {
             var product = _dbContext.Products.FirstOrDefault(x => x.Name == name);
