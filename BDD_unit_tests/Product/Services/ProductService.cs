@@ -55,7 +55,7 @@ namespace BDD_unit_tests.Product.Services
             }
 
             var product = _productRepository.Get(id);
-            if (product != null)
+            if (product == null)
             {
                 throw new ProductDoesNotExistException();
             }
@@ -68,7 +68,7 @@ namespace BDD_unit_tests.Product.Services
         {
             if (!_userRepository.IsModerator(currentUserId))
             {
-                throw new UserIsNotAdmin();
+                throw new UserIsNotModerator();
             }
 
             if (string.IsNullOrEmpty(name))
@@ -87,7 +87,7 @@ namespace BDD_unit_tests.Product.Services
             }
 
             var product = _productRepository.Get(id);
-            if (product != null)
+            if (product == null)
             {
                 throw new ProductDoesNotExistException();
             }
