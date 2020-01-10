@@ -1,5 +1,6 @@
 ﻿using BDD_unit_tests.Product.Models;
 using BDD_unit_tests.Product.ORM;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace BDD_unit_tests.Product.Repository
@@ -28,6 +29,12 @@ namespace BDD_unit_tests.Product.Repository
         {
             var product = _dbContext.Products.SingleOrDefault(x => x.Id == id);
             return product;
+        }
+
+        public IEnumerable<ProductModel> Get()
+        {
+            var products = _dbContext.Products;
+            return products;
         }
     }
 }

@@ -4,6 +4,8 @@ using BDD_unit_tests.Product.Models;
 using BDD_unit_tests.Product.ORM;
 using BDD_unit_tests.Product.Repository;
 using BDD_unit_tests.User.Repository;
+using System;
+using System.Linq;
 
 namespace BDD_unit_tests.Product.Services
 {
@@ -20,7 +22,7 @@ namespace BDD_unit_tests.Product.Services
             _userRepository = new UserRepository(dbContext);
         }
 
-        public void Add(int currentUserId, string name, int cost)
+        public void Add(int currentUserId, string name, int cost, string category)
         {
             if (!_userRepository.IsAdmin(currentUserId))
             {
@@ -37,12 +39,31 @@ namespace BDD_unit_tests.Product.Services
                 throw new ProductCostMustBeGreaterThanZeroException();
             }
 
+            var categoryIsValid = Enum.TryParse<ProductCategory>(category, out ProductCategory categoryEnum);
+            if (!categoryIsValid)
+            {
+                throw new ProductCategoryIsRequired();
+            }
+
             if (_productRepository.Exist(name))
             {
                 throw new ProductNameMustBeUnique();
             }
 
-            var product = new ProductModel { Name = name, Cost = cost };
+            var productsFromCategory = _productRepository.Get().Where(x => x.Category == categoryEnum);
+
+            var costOfProductsFromCategory = productsFromCategory.Sum(x => x.Cost);
+            if (costOfProductsFromCategory + cost > 100)
+            {
+                throw new CostOfProductsInCategoryException();
+            }
+
+            if (productsFromCategory.Count() > 4)
+            {
+                throw new NumberOfProductsInCategoryException();
+            }
+
+            var product = new ProductModel { Name = name, Cost = cost, Category = categoryEnum };
             _dbContext.Add(product);
             _dbContext.SaveChanges();
         }
@@ -64,7 +85,7 @@ namespace BDD_unit_tests.Product.Services
             _dbContext.SaveChanges();
         }
 
-        public void Update(int currentUserId, int id, string name, int cost)
+        public void Update(int currentUserId, int id, string name, int cost, string category)
         {
             if (!_userRepository.IsModerator(currentUserId))
             {
@@ -81,6 +102,12 @@ namespace BDD_unit_tests.Product.Services
                 throw new ProductCostMustBeGreaterThanZeroException();
             }
 
+            var categoryIsValid = Enum.TryParse<ProductCategory>(category, out ProductCategory categoryEnum);
+            if (!categoryIsValid)
+            {
+                throw new ProductCategoryIsRequired();
+            }
+
             if (_productRepository.Exist(name))
             {
                 throw new ProductNameMustBeUnique();
@@ -92,9 +119,21 @@ namespace BDD_unit_tests.Product.Services
                 throw new ProductDoesNotExistException();
             }
 
+            var productsFromCategory = _productRepository.Get().Where(x => x.Category == categoryEnum);
+
+            var costOfProductsFromCategory = productsFromCategory.Sum(x => x.Cost);
+            if (costOfProductsFromCategory + cost > 100)
+            {
+                throw new CostOfProductsInCategoryException();
+            }
+
+            if (productsFromCategory.Count() > 5)
+            {
+                throw new NumberOfProductsInCategoryException();
+            }
+
             product.Name = name;
             product.Cost = cost;
-            _dbContext.Update(product);
             _dbContext.SaveChanges();
         }
     }

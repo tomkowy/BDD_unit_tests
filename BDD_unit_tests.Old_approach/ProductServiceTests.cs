@@ -11,7 +11,7 @@ namespace BDD_unit_tests.Old_approach
 {
     public class ProductServiceTests : TestBase
     {
-        private BddDbContext _dbContext;
+        private readonly BddDbContext _dbContext;
 
         public ProductServiceTests()
         {
@@ -20,7 +20,13 @@ namespace BDD_unit_tests.Old_approach
             _dbContext.Add(new UserModel { Name = "Admin", Type = UserType.Admin });
             _dbContext.Add(new UserModel { Name = "Moderator", Type = UserType.Moderator });
 
-            _dbContext.Add(new ProductModel { Name = "existProduct", Cost = 100 });
+            _dbContext.Add(new ProductModel { Name = "existProduct", Cost = 50, Category = ProductCategory.Small });
+
+            _dbContext.Add(new ProductModel { Name = "existProduct1", Cost = 1, Category = ProductCategory.Big });
+            _dbContext.Add(new ProductModel { Name = "existProduct2", Cost = 2, Category = ProductCategory.Big });
+            _dbContext.Add(new ProductModel { Name = "existProduct3", Cost = 3, Category = ProductCategory.Big });
+            _dbContext.Add(new ProductModel { Name = "existProduct4", Cost = 4, Category = ProductCategory.Big });
+            _dbContext.Add(new ProductModel { Name = "existProduct5", Cost = 5, Category = ProductCategory.Big });
 
             _dbContext.SaveChanges();
         }
@@ -32,7 +38,7 @@ namespace BDD_unit_tests.Old_approach
         {
             var productService = new ProductService(_dbContext);
 
-            void action() => productService.Add(1, name, 100);
+            void action() => productService.Add(1, name, 50, "Small");
 
             Assert.Throws<ProductNameCannotBeEmptyException>(action);
         }
@@ -42,7 +48,7 @@ namespace BDD_unit_tests.Old_approach
         {
             var productService = new ProductService(_dbContext);
 
-            void action() => productService.Add(3, "name", 100);
+            void action() => productService.Add(3, "name", 50, "Small");
 
             Assert.Throws<UserIsNotAdmin>(action);
         }
@@ -52,7 +58,7 @@ namespace BDD_unit_tests.Old_approach
         {
             var productService = new ProductService(_dbContext);
 
-            void action() => productService.Add(1, "existProduct", 100);
+            void action() => productService.Add(1, "existProduct", 50, "Small");
 
             Assert.Throws<ProductNameMustBeUnique>(action);
         }
@@ -64,9 +70,42 @@ namespace BDD_unit_tests.Old_approach
         {
             var productService = new ProductService(_dbContext);
 
-            void action() => productService.Add(1, "name", cost);
+            void action() => productService.Add(1, "name", cost, "Small");
 
             Assert.Throws<ProductCostMustBeGreaterThanZeroException>(action);
+        }
+
+        [Theory]
+        [InlineData("")]
+        [InlineData(null)]
+        [InlineData("wrongCategory")]
+        public void Throw_exception_when_product_category_is_empty_or_null_or_wrong(string category)
+        {
+            var productService = new ProductService(_dbContext);
+
+            void action() => productService.Add(1, "name", 50, category);
+
+            Assert.Throws<ProductCategoryIsRequired>(action);
+        }
+
+        [Fact]
+        public void Throw_exception_when_products_cost_in_category_is_greater_one_hundred()
+        {
+            var productService = new ProductService(_dbContext);
+
+            void action() => productService.Add(1, "name", 101, "Small");
+
+            Assert.Throws<CostOfProductsInCategoryException>(action);
+        }
+
+        [Fact]
+        public void Throw_exception_when_products_count_is_greater_than_five()
+        {
+            var productService = new ProductService(_dbContext);
+
+            void action() => productService.Add(1, "name", 1, "Big");
+
+            Assert.Throws<NumberOfProductsInCategoryException>(action);
         }
 
         [Fact]
@@ -74,7 +113,7 @@ namespace BDD_unit_tests.Old_approach
         {
             var productService = new ProductService(_dbContext);
 
-            productService.Add(1, "productName", 100);
+            productService.Add(1, "productName", 50, "Small");
         }
 
         [Fact]
@@ -100,11 +139,10 @@ namespace BDD_unit_tests.Old_approach
         {
             var productService = new ProductService(_dbContext);
 
-            void action() => productService.Remove(1, 2);
+            void action() => productService.Remove(1, 10);
 
             Assert.Throws<ProductDoesNotExistException>(action);
         }
-
 
         [Theory]
         [InlineData("")]
@@ -113,7 +151,7 @@ namespace BDD_unit_tests.Old_approach
         {
             var productService = new ProductService(_dbContext);
 
-            void action() => productService.Update(2, 1, name, 100);
+            void action() => productService.Update(2, 1, name, 50, "Small");
 
             Assert.Throws<ProductNameCannotBeEmptyException>(action);
         }
@@ -123,7 +161,7 @@ namespace BDD_unit_tests.Old_approach
         {
             var productService = new ProductService(_dbContext);
 
-            void action() => productService.Update(3, 1, "name", 100);
+            void action() => productService.Update(3, 1, "name", 50, "Small");
 
             Assert.Throws<UserIsNotModerator>(action);
         }
@@ -133,7 +171,7 @@ namespace BDD_unit_tests.Old_approach
         {
             var productService = new ProductService(_dbContext);
 
-            void action() => productService.Update(2, 1, "existProduct", 100);
+            void action() => productService.Update(2, 1, "existProduct", 50, "Small");
 
             Assert.Throws<ProductNameMustBeUnique>(action);
         }
@@ -145,7 +183,7 @@ namespace BDD_unit_tests.Old_approach
         {
             var productService = new ProductService(_dbContext);
 
-            void action() => productService.Update(2, 1, "name", cost);
+            void action() => productService.Update(2, 1, "name", cost, "Small");
 
             Assert.Throws<ProductCostMustBeGreaterThanZeroException>(action);
         }
@@ -155,9 +193,32 @@ namespace BDD_unit_tests.Old_approach
         {
             var productService = new ProductService(_dbContext);
 
-            void action() => productService.Update(2, 2, "name", 100);
+            void action() => productService.Update(2, 10, "name", 50, "Small");
 
             Assert.Throws<ProductDoesNotExistException>(action);
+        }
+
+        [Theory]
+        [InlineData("")]
+        [InlineData(null)]
+        [InlineData("wrongCategory")]
+        public void Throw_exception_when_updating_product_category_is_empty_or_null_or_wrong(string category)
+        {
+            var productService = new ProductService(_dbContext);
+
+            void action() => productService.Update(2, 10, "name", 15000, category);
+
+            Assert.Throws<ProductCategoryIsRequired>(action);
+        }
+
+        [Fact]
+        public void Throw_exception_when_updating_products_cost_in_category_is_greater_one_hundred()
+        {
+            var productService = new ProductService(_dbContext);
+
+            void action() => productService.Update(2, 1, "productName", 101, "Small");
+
+            Assert.Throws<CostOfProductsInCategoryException>(action);
         }
 
         [Fact]
@@ -165,7 +226,7 @@ namespace BDD_unit_tests.Old_approach
         {
             var productService = new ProductService(_dbContext);
 
-            productService.Update(2, 1, "productName", 100);
+            productService.Update(2, 1, "productName", 50, "Small");
         }
     }
 }
