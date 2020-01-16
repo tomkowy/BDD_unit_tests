@@ -5,11 +5,11 @@ using System.Linq;
 
 namespace BDD_unit_tests.Product.Repository
 {
-    public class ProductReposiotry : IProductRepository
+    public class ProductRepository : IProductRepository
     {
         private readonly BddDbContext _dbContext;
 
-        public ProductReposiotry(BddDbContext dbContext)
+        public ProductRepository(BddDbContext dbContext)
         {
             _dbContext = dbContext;
         }

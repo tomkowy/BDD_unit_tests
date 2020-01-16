@@ -157,7 +157,8 @@ namespace BDD_unit_tests.First_approach.Product
             Runner.RunScenario(
                 Give_admin,
                 Give_existing_product_id,
-                When_remove_product
+                When_remove_product,
+                Then_throw_cost_of_products_in_category_exception
                 );
         }
 

@@ -2,9 +2,11 @@
 using BDD_unit_tests.First_approach.Helpers;
 using BDD_unit_tests.Product.Exceptions;
 using BDD_unit_tests.Product.Models;
+using BDD_unit_tests.Product.Repository;
 using BDD_unit_tests.Product.Services;
-using BDD_unit_tests.User.Models;
+using BDD_unit_tests.User.Repository;
 using LightBDD.XUnit2;
+using Moq;
 using System;
 using Xunit;
 
@@ -27,20 +29,22 @@ namespace BDD_unit_tests.First_approach.Product
         public ProductServiceTest()
         {
             var dbContext = GetDbContext();
-
-            _productService = new ProductService(dbContext);
-
-            dbContext.Add(new UserModel { Name = "Admin", Type = UserType.Admin });
-            dbContext.Add(new UserModel { Name = "Moderator", Type = UserType.Moderator });
-
-            dbContext.Add(new ProductModel { Name = "existProduct", Cost = 50, Category = ProductCategory.Small });
-
             dbContext.Add(new ProductModel { Name = "existProduct1", Cost = 1, Category = ProductCategory.Big });
             dbContext.Add(new ProductModel { Name = "existProduct2", Cost = 2, Category = ProductCategory.Big });
             dbContext.Add(new ProductModel { Name = "existProduct3", Cost = 3, Category = ProductCategory.Big });
             dbContext.Add(new ProductModel { Name = "existProduct4", Cost = 4, Category = ProductCategory.Big });
             dbContext.Add(new ProductModel { Name = "existProduct5", Cost = 5, Category = ProductCategory.Big });
             dbContext.SaveChanges();
+
+            var productRepository = new Mock<IProductRepository>();
+            productRepository.Setup(x => x.Exist("existProduct")).Returns(true);
+            productRepository.Setup(x => x.Get(1)).Returns(new ProductModel());
+
+            var userRepository = new Mock<IUserRepository>();
+            userRepository.Setup(x => x.IsAdmin(1)).Returns(true);
+            userRepository.Setup(x => x.IsModerator(2)).Returns(true);
+
+            _productService = new ProductService(productRepository.Object, userRepository.Object, dbContext);
         }
 
         private void Give_admin()

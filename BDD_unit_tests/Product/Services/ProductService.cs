@@ -15,11 +15,11 @@ namespace BDD_unit_tests.Product.Services
         private readonly IUserRepository _userRepository;
         private readonly BddDbContext _dbContext;
 
-        public ProductService(BddDbContext dbContext)
+        public ProductService(IProductRepository productRepository, IUserRepository userRepository, BddDbContext dbContext)
         {
+            _productRepository = productRepository;
+            _userRepository = userRepository;
             _dbContext = dbContext;
-            _productRepository = new ProductReposiotry(dbContext);
-            _userRepository = new UserRepository(dbContext);
         }
 
         public void Add(int currentUserId, string name, int cost, string category)
@@ -50,7 +50,7 @@ namespace BDD_unit_tests.Product.Services
                 throw new ProductNameMustBeUnique();
             }
 
-            var productsFromCategory = _productRepository.Get().Where(x => x.Category == categoryEnum);
+            var productsFromCategory = _dbContext.Products.Where(x => x.Category == categoryEnum);
 
             var costOfProductsFromCategory = productsFromCategory.Sum(x => x.Cost);
             if (costOfProductsFromCategory + cost > 100)
@@ -119,7 +119,7 @@ namespace BDD_unit_tests.Product.Services
                 throw new ProductDoesNotExistException();
             }
 
-            var productsFromCategory = _productRepository.Get().Where(x => x.Category == categoryEnum);
+            var productsFromCategory = _dbContext.Products.Where(x => x.Category == categoryEnum);
 
             var costOfProductsFromCategory = productsFromCategory.Sum(x => x.Cost);
             if (costOfProductsFromCategory + cost > 100)
