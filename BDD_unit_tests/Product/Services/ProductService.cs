@@ -119,7 +119,7 @@ namespace BDD_unit_tests.Product.Services
                 throw new ProductDoesNotExistException();
             }
 
-            var productsFromCategory = _dbContext.Products.Where(x => x.Category == categoryEnum);
+            var productsFromCategory = _productRepository.Get(categoryEnum);
 
             var costOfProductsFromCategory = productsFromCategory.Sum(x => x.Cost);
             if (costOfProductsFromCategory + cost > 100)
