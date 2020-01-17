@@ -8,6 +8,7 @@ using BDD_unit_tests.User.Repository;
 using LightBDD.XUnit2;
 using Moq;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
@@ -31,15 +32,19 @@ namespace BDD_unit_tests.First_approach.Product
         {
             var dbContext = GetDbContext();
             dbContext.Add(new ProductModel { Name = "existProduct1", Cost = 1, Category = ProductCategory.Big });
-            dbContext.Add(new ProductModel { Name = "existProduct2", Cost = 2, Category = ProductCategory.Big });
-            dbContext.Add(new ProductModel { Name = "existProduct3", Cost = 3, Category = ProductCategory.Big });
-            dbContext.Add(new ProductModel { Name = "existProduct4", Cost = 4, Category = ProductCategory.Big });
-            dbContext.Add(new ProductModel { Name = "existProduct5", Cost = 5, Category = ProductCategory.Big });
             dbContext.SaveChanges();
 
             var productRepository = new Mock<IProductRepository>();
             productRepository.Setup(x => x.Exist("existProduct")).Returns(true);
             productRepository.Setup(x => x.Get(1)).Returns(dbContext.Products.First());
+            productRepository.Setup(x => x.Get(ProductCategory.Big)).Returns(new List<ProductModel>
+            {
+                new ProductModel { Name = "existProduct1", Cost = 1, Category = ProductCategory.Big },
+                new ProductModel { Name = "existProduct2", Cost = 2, Category = ProductCategory.Big },
+                new ProductModel { Name = "existProduct3", Cost = 3, Category = ProductCategory.Big },
+                new ProductModel { Name = "existProduct4", Cost = 4, Category = ProductCategory.Big },
+                new ProductModel { Name = "existProduct5", Cost = 5, Category = ProductCategory.Big }
+            });
 
             var userRepository = new Mock<IUserRepository>();
             userRepository.Setup(x => x.IsAdmin(1)).Returns(true);

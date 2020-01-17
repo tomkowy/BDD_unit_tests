@@ -9,5 +9,6 @@ namespace BDD_unit_tests.Product.Repository
         bool Exist(int id);
         ProductModel Get(int id);
         IEnumerable<ProductModel> Get();
+        IEnumerable<ProductModel> Get(ProductCategory category);
     }
 }

@@ -36,5 +36,11 @@ namespace BDD_unit_tests.Product.Repository
             var products = _dbContext.Products;
             return products;
         }
+
+        public IEnumerable<ProductModel> Get(ProductCategory category)
+        {
+            var products = _dbContext.Products.Where(x => x.Category == category);
+            return products;
+        }
     }
 }

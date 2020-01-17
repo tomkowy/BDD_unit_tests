@@ -5,9 +5,9 @@ using BDD_unit_tests.Product.Models;
 using BDD_unit_tests.Product.ORM;
 using BDD_unit_tests.Product.Repository;
 using BDD_unit_tests.Product.Services;
-using BDD_unit_tests.User.Models;
 using BDD_unit_tests.User.Repository;
 using Moq;
+using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
@@ -22,18 +22,20 @@ namespace BDD_unit_tests.Old_approach
         public ProductServiceTests()
         {
             _dbContext = GetDbContext();
-
             _dbContext.Add(new ProductModel { Name = "existProduct1", Cost = 1, Category = ProductCategory.Big });
-            _dbContext.Add(new ProductModel { Name = "existProduct2", Cost = 2, Category = ProductCategory.Big });
-            _dbContext.Add(new ProductModel { Name = "existProduct3", Cost = 3, Category = ProductCategory.Big });
-            _dbContext.Add(new ProductModel { Name = "existProduct4", Cost = 4, Category = ProductCategory.Big });
-            _dbContext.Add(new ProductModel { Name = "existProduct5", Cost = 5, Category = ProductCategory.Big });
-
             _dbContext.SaveChanges();
 
             var productRepository = new Mock<IProductRepository>();
             productRepository.Setup(x => x.Exist("existProduct")).Returns(true);
             productRepository.Setup(x => x.Get(1)).Returns(_dbContext.Products.First());
+            productRepository.Setup(x => x.Get(ProductCategory.Big)).Returns(new List<ProductModel>
+            {
+                new ProductModel { Name = "existProduct1", Cost = 1, Category = ProductCategory.Big },
+                new ProductModel { Name = "existProduct2", Cost = 2, Category = ProductCategory.Big },
+                new ProductModel { Name = "existProduct3", Cost = 3, Category = ProductCategory.Big },
+                new ProductModel { Name = "existProduct4", Cost = 4, Category = ProductCategory.Big },
+                new ProductModel { Name = "existProduct5", Cost = 5, Category = ProductCategory.Big }
+            });
 
             var userRepository = new Mock<IUserRepository>();
             userRepository.Setup(x => x.IsAdmin(1)).Returns(true);
