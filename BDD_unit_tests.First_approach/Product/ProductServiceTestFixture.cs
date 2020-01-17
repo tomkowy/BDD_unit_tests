@@ -8,6 +8,7 @@ using BDD_unit_tests.User.Repository;
 using LightBDD.XUnit2;
 using Moq;
 using System;
+using System.Linq;
 using Xunit;
 
 [assembly: LightBddScopeAttribute]
@@ -38,7 +39,7 @@ namespace BDD_unit_tests.First_approach.Product
 
             var productRepository = new Mock<IProductRepository>();
             productRepository.Setup(x => x.Exist("existProduct")).Returns(true);
-            productRepository.Setup(x => x.Get(1)).Returns(new ProductModel());
+            productRepository.Setup(x => x.Get(1)).Returns(dbContext.Products.First());
 
             var userRepository = new Mock<IUserRepository>();
             userRepository.Setup(x => x.IsAdmin(1)).Returns(true);
@@ -134,20 +135,17 @@ namespace BDD_unit_tests.First_approach.Product
 
         private void When_add_product()
         {
-            void action() => _productService.Add(_currentUserId, _name, _cost, _category);
-            _action = action;
+            _action = () => _productService.Add(_currentUserId, _name, _cost, _category);
         }
 
         private void When_remove_product()
         {
-            void action() => _productService.Remove(_currentUserId, _productId);
-            _action = action;
+            _action = () => _productService.Remove(_currentUserId, _productId);
         }
 
         private void When_update_product()
         {
-            void action() => _productService.Update(_currentUserId, _productId, _name, _cost, _category);
-            _action = action;
+            _action = () => _productService.Update(_currentUserId, _productId, _name, _cost, _category);
         }
 
         private void Then_throw_product_name_cannot_be_empty_exception()
@@ -193,6 +191,11 @@ namespace BDD_unit_tests.First_approach.Product
         private void Then_throw_product_does_not_exist_exception()
         {
             Assert.Throws<ProductDoesNotExistException>(_action);
+        }
+
+        private void Then_throw_no_exception()
+        {
+            _action();
         }
     }
 }
