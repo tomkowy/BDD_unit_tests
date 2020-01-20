@@ -1,7 +1,7 @@
 ﻿using LightBDD.Framework.Scenarios;
 using LightBDD.XUnit2;
 
-namespace BDD_unit_tests.Tests.Product.SimpeTest_BetterSetup
+namespace BDD_unit_tests.Tests.Product.SimpleTest_BetterSetup
 {
     public partial class ProductServiceTest
     {

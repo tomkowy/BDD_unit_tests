@@ -4,7 +4,7 @@ using BDD_unit_tests.Tests.Helpers;
 using System;
 using Xunit;
 
-namespace BDD_unit_tests.Tests.Product.SimpeTest_BetterMocks
+namespace BDD_unit_tests.Tests.Product.SimpleTest_BetterSetup
 {
     public partial class ProductServiceTest : TestBase
     {
@@ -15,23 +15,21 @@ namespace BDD_unit_tests.Tests.Product.SimpeTest_BetterMocks
 
         private Action _action;
 
+        private readonly ProductRepositoryMock _productRepositoryMock = new ProductRepositoryMock();
+        private readonly UserRepositoryMock _userRepositoryMock = new UserRepositoryMock();
         private IProductService _productService;
 
         public ProductServiceTest()
         {
             var dbContext = GetDbContext();
 
-            var productRepositoryMock = new ProductRepositoryMock();
-
-            var userRepositoryMock = new UserRepositoryMock();
-            userRepositoryMock.IsModeratorMock(_currentUserId, true);
-
-            _productService = new ProductService(productRepositoryMock.Object, userRepositoryMock.Object, dbContext);
+            _productService = new ProductService(_productRepositoryMock.Object, _userRepositoryMock.Object, dbContext);
         }
 
         private void Give_moderator()
         {
             _currentUserId = 2;
+            _userRepositoryMock.IsModeratorMock(_currentUserId, true);
         }
 
         private void When_add_product()

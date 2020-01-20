@@ -1,7 +1,7 @@
 ﻿using BDD_unit_tests.User.Repository;
 using Moq;
 
-namespace BDD_unit_tests.Tests.Product.SimpeTest_BetterSetup
+namespace BDD_unit_tests.Tests.Product.SimpleTest_BetterMocks
 {
     public class UserRepositoryMock : Mock<IUserRepository>
     {
