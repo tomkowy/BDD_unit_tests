@@ -50,87 +50,87 @@ namespace BDD_unit_tests.Tests.Product.ComplexTest
             _productService = new ProductService(productRepository.Object, userRepository.Object, dbContext);
         }
 
-        private void Give_admin()
+        private void Given_admin()
         {
             _currentUserId = 1;
         }
 
-        private void Give_moderator()
+        private void Given_moderator()
         {
             _currentUserId = 2;
         }
 
-        private void Give_empty_name()
+        private void Given_empty_name()
         {
             _name = "";
         }
 
-        private void Give_null_name()
+        private void Given_null_name()
         {
             _name = null;
         }
 
-        private void Give_existing_name()
+        private void Given_existing_name()
         {
             _name = "existProduct";
         }
 
-        private void Give_name()
+        private void Given_name()
         {
             _name = "name";
         }
 
-        private void Give_cost()
+        private void Given_cost()
         {
             _cost = 2;
         }
 
-        private void Give_cost_equal_zero()
+        private void Given_cost_equal_zero()
         {
             _cost = 0;
         }
 
-        private void Give_cost_lower_than_zero()
+        private void Given_cost_lower_than_zero()
         {
             _cost = -1;
         }
 
-        private void Give_cost_greater_than_hundred()
+        private void Given_cost_greater_than_hundred()
         {
             _cost = 101;
         }
 
-        private void Give_category()
+        private void Given_category()
         {
             _category = ProductCategory.Small.ToString();
         }
 
-        private void Give_category_big()
+        private void Given_category_big()
         {
             _category = ProductCategory.Big.ToString();
         }
 
-        private void Give_empty_category()
+        private void Given_empty_category()
         {
             _category = "";
         }
 
-        private void Give_null_category()
+        private void Given_null_category()
         {
             _category = null;
         }
 
-        private void Give_incorrect_category()
+        private void Given_incorrect_category()
         {
             _category = "incorrectCategory";
         }
 
-        private void Give_existing_product_id()
+        private void Given_existing_product_id()
         {
             _productId = 1;
         }
 
-        private void Give_not_existing_product_id()
+        private void Given_not_existing_product_id()
         {
             _productId = 10;
         }

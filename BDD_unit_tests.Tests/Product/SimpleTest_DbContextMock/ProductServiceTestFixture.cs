@@ -29,22 +29,29 @@ namespace BDD_unit_tests.Tests.Product.SimpleTest_DbContextMock
             _productService = new ProductService(_productRepositoryMock.Object, _userRepositoryMock.Object, _dbContext);
         }
 
-        private void Give_current_user_as_admin()
+        private void Given_current_user_as_admin()
         {
             _currentUserId = 1;
-            _userRepositoryMock.IsAdminMock(_currentUserId, true);
+            _userRepositoryMock
+                .IsAdminMock(_currentUserId, true);
         }
 
-        private void Give_product_to_db_context()
+        private void Given_product_to_db_context()
         {
-            _dbContext.Add(new ProductModel { Name = "existProduct1", Cost = 1, Category = ProductCategory.Big });
+            _dbContext.Add(new ProductModel
+            {
+                Name = "existProduct1",
+                Cost = 1,
+                Category = ProductCategory.Big
+            });
             _dbContext.SaveChanges();
         }
 
-        private void Give_existing_product_id_from_db_context()
+        private void Given_existing_product_id_from_db_context()
         {
             _productId = 1;
-            _productRepositoryMock.GetMock(_productId, _dbContext.Products.First());
+            _productRepositoryMock
+                .GetMock(_productId, _dbContext.Products.First());
         }
 
         private void When_remove_product()

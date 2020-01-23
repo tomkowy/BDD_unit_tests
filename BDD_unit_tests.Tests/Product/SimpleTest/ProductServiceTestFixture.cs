@@ -35,14 +35,15 @@ namespace BDD_unit_tests.Tests.Product.SimpleTest
             _productService = new ProductService(productRepository.Object, userRepository.Object, dbContext);
         }
 
-        private void Give_moderator()
+        private void Given_moderator()
         {
             _currentUserId = 2;
         }
 
         private void When_add_product()
         {
-            _action = () => _productService.Add(_currentUserId, _name, _cost, _category);
+            _action = () => _productService
+                .Add(_currentUserId, _name, _cost, _category);
         }
 
         private void Then_throw_user_is_not_admin_exception()

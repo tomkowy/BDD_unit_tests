@@ -23,13 +23,15 @@ namespace BDD_unit_tests.Tests.Product.SimpleTest_BetterSetup
         {
             var dbContext = GetDbContext();
 
-            _productService = new ProductService(_productRepositoryMock.Object, _userRepositoryMock.Object, dbContext);
+            _productService = new ProductService(_productRepositoryMock.Object,
+                _userRepositoryMock.Object, dbContext);
         }
 
-        private void Give_moderator()
+        private void Given_moderator()
         {
             _currentUserId = 2;
-            _userRepositoryMock.IsModeratorMock(_currentUserId, true);
+            _userRepositoryMock
+                .IsModeratorMock(_currentUserId, true);
         }
 
         private void When_add_product()

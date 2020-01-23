@@ -32,97 +32,97 @@ namespace BDD_unit_tests.Tests.Product.ComplexTest_BetterSetup
             _productService = new ProductService(_productRepositoryMock.Object, _userRepositoryMock.Object, _dbContext);
         }
 
-        private void Give_current_user_as_admin()
+        private void Given_current_user_as_admin()
         {
             _currentUserId = 1;
             _userRepositoryMock.IsAdminMock(_currentUserId, true);
         }
 
-        private void Give_current_user_as_moderator()
+        private void Given_current_user_as_moderator()
         {
             _currentUserId = 2;
             _userRepositoryMock.IsModeratorMock(_currentUserId, true);
         }
 
-        private void Give_empty_product_name()
+        private void Given_empty_product_name()
         {
             _name = "";
         }
 
-        private void Give_null_product_name()
+        private void Given_null_product_name()
         {
             _name = null;
         }
 
-        private void Give_existing_product_name()
+        private void Given_existing_product_name()
         {
             _name = "existProduct";
             _productRepositoryMock.ExistMock(_name, true);
         }
 
-        private void Give_unique_product_name()
+        private void Given_unique_product_name()
         {
             _name = "name";
         }
 
-        private void Give_product_cost_greater_than_zero()
+        private void Given_product_cost_greater_than_zero()
         {
             _cost = 2;
         }
 
-        private void Give_product_cost_equal_zero()
+        private void Given_product_cost_equal_zero()
         {
             _cost = 0;
         }
 
-        private void Give_product_cost_lower_than_zero()
+        private void Given_product_cost_lower_than_zero()
         {
             _cost = -1;
         }
 
-        private void Give_product_cost_greater_than_hundred()
+        private void Given_product_cost_greater_than_hundred()
         {
             _cost = 101;
         }
 
-        private void Give_product_category_small()
+        private void Given_product_category_small()
         {
             _category = ProductCategory.Small.ToString();
         }
 
-        private void Give_product_category_big()
+        private void Given_product_category_big()
         {
             _category = ProductCategory.Big.ToString();
         }
 
-        private void Give_empty_product_category()
+        private void Given_empty_product_category()
         {
             _category = "";
         }
 
-        private void Give_null_product_category()
+        private void Given_null_product_category()
         {
             _category = null;
         }
 
-        private void Give_incorrect_product_category()
+        private void Given_incorrect_product_category()
         {
             _category = "incorrectCategory";
         }
 
-        private void Give_existing_product_id()
+        private void Given_existing_product_id()
         {
             _productId = 1;
             _productRepositoryMock.GetMock(_productId, new ProductModel());
         }
 
-        private void Give_not_existing_product_id()
+        private void Given_not_existing_product_id()
         {
             _productId = 10;
             _productRepositoryMock.GetMock(_productId, null);
         }
 
-        private void Give_five_products_from_category_big()
+        private void Given_five_products_from_category_big()
         {
             _productRepositoryMock.GetMock(ProductCategory.Big, new List<ProductModel> {
                 new ProductModel { Name = "existProduct1", Cost = 1, Category = ProductCategory.Big },
@@ -133,13 +133,13 @@ namespace BDD_unit_tests.Tests.Product.ComplexTest_BetterSetup
             });
         }
 
-        private void Give_product_to_db_context()
+        private void Given_product_to_db_context()
         {
             _dbContext.Add(new ProductModel { Name = "existProduct1", Cost = 1, Category = ProductCategory.Big });
             _dbContext.SaveChanges();
         }
 
-        private void Give_existing_product_id_from_db_context()
+        private void Given_existing_product_id_from_db_context()
         {
             _productId = 1;
             _productRepositoryMock.GetMock(_productId, _dbContext.Products.First());

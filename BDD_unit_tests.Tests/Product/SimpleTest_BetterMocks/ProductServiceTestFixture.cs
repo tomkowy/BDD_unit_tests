@@ -26,10 +26,11 @@ namespace BDD_unit_tests.Tests.Product.SimpleTest_BetterMocks
             var userRepositoryMock = new UserRepositoryMock();
             userRepositoryMock.IsModeratorMock(_currentUserId, true);
 
-            _productService = new ProductService(productRepositoryMock.Object, userRepositoryMock.Object, dbContext);
+            _productService = new ProductService(productRepositoryMock.Object,
+                userRepositoryMock.Object, dbContext);
         }
 
-        private void Give_moderator()
+        private void Given_moderator()
         {
             _currentUserId = 2;
         }
