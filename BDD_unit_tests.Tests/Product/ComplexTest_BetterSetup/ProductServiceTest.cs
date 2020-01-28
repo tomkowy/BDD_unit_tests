@@ -13,7 +13,9 @@ namespace BDD_unit_tests.Tests.Product.ComplexTest_BetterSetup
                 Given_unique_product_name,
                 Given_product_cost_greater_than_zero,
                 Given_product_category_small,
-                When_add_product
+                When_add_product,
+                Then_throw_no_exception,
+                Then_added_product_id_is_not_empty
                 );
         }
 
@@ -169,7 +171,8 @@ namespace BDD_unit_tests.Tests.Product.ComplexTest_BetterSetup
         {
             Runner.RunScenario(
                 Given_current_user_as_moderator,
-                When_remove_product
+                When_remove_product,
+                Then_throw_user_is_not_admin_exception
                 );
         }
 
@@ -188,12 +191,13 @@ namespace BDD_unit_tests.Tests.Product.ComplexTest_BetterSetup
         public void Update_product()
         {
             Runner.RunScenario(
-                Given_current_user_as_admin,
+                Given_current_user_as_moderator,
                 Given_unique_product_name,
                 Given_product_cost_greater_than_zero,
                 Given_product_category_small,
                 Given_existing_product_id,
-                When_update_product
+                When_update_product,
+                Then_throw_no_exception
                 );
         }
 

@@ -13,7 +13,9 @@ namespace BDD_unit_tests.Tests.Product.ComplexTest
                 Given_name,
                 Given_cost,
                 Given_category,
-                When_add_product
+                When_add_product,
+                Then_throw_no_exception,
+                Then_added_product_id_is_not_empty
                 );
         }
 
@@ -167,7 +169,8 @@ namespace BDD_unit_tests.Tests.Product.ComplexTest
         {
             Runner.RunScenario(
                 Given_moderator,
-                When_remove_product
+                When_remove_product,
+                Then_throw_user_is_not_admin_exception
                 );
         }
 
@@ -186,12 +189,13 @@ namespace BDD_unit_tests.Tests.Product.ComplexTest
         public void Update_product()
         {
             Runner.RunScenario(
-                Given_admin,
+                Given_moderator,
                 Given_name,
                 Given_cost,
                 Given_category,
                 Given_existing_product_id,
-                When_update_product
+                When_update_product,
+                Then_throw_no_exception
                 );
         }
 
