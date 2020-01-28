@@ -22,7 +22,7 @@ namespace BDD_unit_tests.Product.Services
             _dbContext = dbContext;
         }
 
-        public void Add(int currentUserId, string name, int cost, string category)
+        public int Add(int currentUserId, string name, int cost, string category)
         {
             if (!_userRepository.IsAdmin(currentUserId))
             {
@@ -64,8 +64,9 @@ namespace BDD_unit_tests.Product.Services
             }
 
             var product = new ProductModel { Name = name, Cost = cost, Category = categoryEnum };
-            _dbContext.Add(product);
+            var addedProduct = _dbContext.Add(product);
             _dbContext.SaveChanges();
+            return addedProduct.Entity.Id;
         }
 
         public void Remove(int currentUserId, int id)

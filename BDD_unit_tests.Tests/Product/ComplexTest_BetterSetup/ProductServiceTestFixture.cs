@@ -19,7 +19,8 @@ namespace BDD_unit_tests.Tests.Product.ComplexTest_BetterSetup
         private string _category;
         private int _productId;
 
-        private Action _action;
+        private Exception _exception;
+        private int _result;
 
         private readonly IProductService _productService;
         private readonly UserRepositoryMock _userRepositoryMock = new UserRepositoryMock();
@@ -147,67 +148,75 @@ namespace BDD_unit_tests.Tests.Product.ComplexTest_BetterSetup
 
         private void When_add_product()
         {
-            _action = () => _productService.Add(_currentUserId, _name, _cost, _category);
+            try { _result = _productService.Add(_currentUserId, _name, _cost, _category); }
+            catch (Exception e) { _exception = e; }
         }
 
         private void When_remove_product()
         {
-            _action = () => _productService.Remove(_currentUserId, _productId);
+            try { _productService.Remove(_currentUserId, _productId); }
+            catch (Exception e) { _exception = e; }
         }
 
         private void When_update_product()
         {
-            _action = () => _productService.Update(_currentUserId, _productId, _name, _cost, _category);
+            try { _productService.Update(_currentUserId, _productId, _name, _cost, _category); }
+            catch (Exception e) { _exception = e; }
         }
 
         private void Then_throw_product_name_cannot_be_empty_exception()
         {
-            Assert.Throws<ProductNameCannotBeEmptyException>(_action);
+            Assert.IsType<ProductNameCannotBeEmptyException>(_exception);
         }
 
         private void Then_throw_user_is_not_admin_exception()
         {
-            Assert.Throws<UserIsNotAdmin>(_action);
+            Assert.IsType<UserIsNotAdmin>(_exception);
         }
 
         private void Then_throw_product_name_must_be_unique_exception()
         {
-            Assert.Throws<ProductNameMustBeUnique>(_action);
+            Assert.IsType<ProductNameMustBeUnique>(_exception);
         }
 
         private void Then_throw_product_cost_must_be_greates_than_zero_exception()
         {
-            Assert.Throws<ProductCostMustBeGreaterThanZeroException>(_action);
+            Assert.IsType<ProductCostMustBeGreaterThanZeroException>(_exception);
         }
 
         private void Then_throw_product_category_is_required_exception()
         {
-            Assert.Throws<ProductCategoryIsRequired>(_action);
+            Assert.IsType<ProductCategoryIsRequired>(_exception);
         }
 
         private void Then_throw_cost_of_products_in_category_exception()
         {
-            Assert.Throws<CostOfProductsInCategoryException>(_action);
+            Assert.IsType<CostOfProductsInCategoryException>(_exception);
         }
 
         private void Then_throw_number_of_products_in_category_exception()
         {
-            Assert.Throws<NumberOfProductsInCategoryException>(_action);
+            Assert.IsType<NumberOfProductsInCategoryException>(_exception);
         }
 
         private void Then_throw_user_is_not_moderator_exception()
         {
-            Assert.Throws<UserIsNotModerator>(_action);
+            Assert.IsType<UserIsNotModerator>(_exception);
         }
 
         private void Then_throw_product_does_not_exist_exception()
         {
-            Assert.Throws<ProductDoesNotExistException>(_action);
+            Assert.IsType<ProductDoesNotExistException>(_exception);
         }
 
         private void Then_throw_no_exception()
         {
-            _action();
+            Assert.Null(_exception);
+        }
+
+        private void Then_added_product_id_is_not_empty()
+        {
+            Assert.NotEqual(0, _result);
         }
     }
 }

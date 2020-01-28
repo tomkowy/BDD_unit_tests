@@ -4,18 +4,16 @@ using BDD_unit_tests.Product.Services;
 using BDD_unit_tests.Tests.Helpers;
 using System;
 using System.Linq;
+using Xunit;
 
 namespace BDD_unit_tests.Tests.Product.SimpleTest_DbContextMock
 {
     public partial class ProductServiceTest : TestBase
     {
         private int _currentUserId;
-        private string _name;
-        private int _cost;
-        private string _category;
         private int _productId;
 
-        private Action _action;
+        private Exception _exception;
 
         private readonly ProductRepositoryMock _productRepositoryMock = new ProductRepositoryMock();
         private readonly UserRepositoryMock _userRepositoryMock = new UserRepositoryMock();
@@ -56,12 +54,19 @@ namespace BDD_unit_tests.Tests.Product.SimpleTest_DbContextMock
 
         private void When_remove_product()
         {
-            _action = () => _productService.Remove(_currentUserId, _productId);
+            try
+            {
+                _productService.Remove(_currentUserId, _productId);
+            }
+            catch (Exception e)
+            {
+                _exception = e;
+            }
         }
 
         private void Then_throw_no_exception()
         {
-            _action();
+            Assert.Null(_exception);
         }
     }
 }

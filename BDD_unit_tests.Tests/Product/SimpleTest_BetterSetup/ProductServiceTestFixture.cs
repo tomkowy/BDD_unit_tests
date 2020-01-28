@@ -13,7 +13,8 @@ namespace BDD_unit_tests.Tests.Product.SimpleTest_BetterSetup
         private int _cost;
         private string _category;
 
-        private Action _action;
+        private Exception _exception;
+        private int _result;
 
         private readonly ProductRepositoryMock _productRepositoryMock = new ProductRepositoryMock();
         private readonly UserRepositoryMock _userRepositoryMock = new UserRepositoryMock();
@@ -36,12 +37,19 @@ namespace BDD_unit_tests.Tests.Product.SimpleTest_BetterSetup
 
         private void When_add_product()
         {
-            _action = () => _productService.Add(_currentUserId, _name, _cost, _category);
+            try
+            {
+                _result = _productService.Add(_currentUserId, _name, _cost, _category);
+            }
+            catch (Exception e)
+            {
+                _exception = e;
+            }
         }
 
         private void Then_throw_user_is_not_admin_exception()
         {
-            Assert.Throws<UserIsNotAdmin>(_action);
+            Assert.IsType<UserIsNotAdmin>(_exception);
         }
     }
 }

@@ -2,9 +2,9 @@
 {
     public interface IProductService
     {
-        void Add(int currentUserId, string name, 
+        int Add(int currentUserId, string name,
             int cost, string category);
-        void Update(int currentUserId, int id, 
+        void Update(int currentUserId, int id,
             string name, int cost, string category);
         void Remove(int currentUserId, int id);
     }
