@@ -45,7 +45,8 @@ namespace BDD_unit_tests.Tests.Product.SimpleTest
         {
             try
             {
-                _result = _productService.Add(_currentUserId, _name, _cost, _category);
+                _result = _productService
+                    .Add(_currentUserId, _name, _cost, _category);
             }
             catch (Exception e)
             {
